@@ -1,4 +1,5 @@
 // components/Movie/MovieModal.js
+// MovieModal.js
 import React, { useState, useEffect } from 'react';
 import Button from '../UI/Button';
 
@@ -14,12 +15,24 @@ const MovieModal = ({ movie, onClose, onSave }) => {
 
   useEffect(() => {
     if (movie) {
-      setMovieData(movie);
+      // movie 객체가 존재할 때만 상태 업데이트
+      setMovieData({
+        title: movie.title || '',
+        posterUrl: movie.posterUrl || '',
+        year: movie.year || '',
+        genre: movie.genre || '',
+        runtime: movie.runtime || '',
+        audience: movie.audience || ''
+      });
     }
-  }, [movie]);
+  }, [movie]); // movie를 의존성 배열에 추가
 
   const handleInputChange = (e) => {
-    setMovieData({ ...movieData, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setMovieData(prev => ({
+      ...prev,
+      [id]: value
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -28,6 +41,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
       ? `https://672dfba9fd897971564488cd.mockapi.io/Movies/${movie.id}`
       : 'https://672dfba9fd897971564488cd.mockapi.io/Movies';
     const method = movie ? 'PUT' : 'POST';
+    
     fetch(url, {
       method,
       headers: {
@@ -55,9 +69,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
               <div className="form-group">
-                <label htmlFor="title">
-                  <i className="fas fa-film mr-2"></i>Title:
-                </label>
+                <label htmlFor="title">Title:</label>
                 <input
                   type="text"
                   className="form-control"
@@ -68,9 +80,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="posterUrl">
-                  <i className="fas fa-image mr-2"></i>Poster URL:
-                </label>
+                <label htmlFor="posterUrl">Poster URL:</label>
                 <input
                   type="text"
                   className="form-control"
@@ -81,9 +91,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="year">
-                  <i className="fas fa-calendar-alt mr-2"></i>Release Year:
-                </label>
+                <label htmlFor="year">Release Year:</label>
                 <input
                   type="number"
                   className="form-control"
@@ -94,9 +102,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="genre">
-                  <i className="fas fa-theater-masks mr-2"></i>Genre:
-                </label>
+                <label htmlFor="genre">Genre:</label>
                 <input
                   type="text"
                   className="form-control"
@@ -107,9 +113,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="runtime">
-                  <i className="fas fa-clock mr-2"></i>Runtime (minutes):
-                </label>
+                <label htmlFor="runtime">Runtime (minutes):</label>
                 <input
                   type="number"
                   className="form-control"
@@ -120,9 +124,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="audience">
-                  <i className="fas fa-users mr-2"></i>Audience:
-                </label>
+                <label htmlFor="audience">Audience:</label>
                 <input
                   type="number"
                   className="form-control"
@@ -134,12 +136,8 @@ const MovieModal = ({ movie, onClose, onSave }) => {
               </div>
             </div>
             <div className="modal-footer">
-              <Button onClick={onClose} variant="secondary">
-                <i className="fas fa-times mr-2"></i>Cancel
-              </Button>
-              <Button type="submit" variant="success">
-                <i className="fas fa-save mr-2"></i>Save
-              </Button>
+              <Button onClick={onClose} variant="secondary">Cancel</Button>
+              <Button type="submit" variant="success">Save</Button>
             </div>
           </form>
         </div>

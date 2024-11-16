@@ -1,4 +1,5 @@
 // components/Pages/ShowList.js
+// ShowList.js
 import React, { useState, useEffect } from 'react';
 import MovieList from '../Movie/MovieList';
 import MovieModal from '../Movie/MovieModal';
@@ -37,7 +38,7 @@ const ShowList = () => {
   };
 
   const handleEditMovie = (movie) => {
-    setSelectedMovie(movie);
+    setSelectedMovie(movie); // movie 객체 전체를 저장
     setShowModal(true);
   };
 
@@ -64,7 +65,11 @@ const ShowList = () => {
       ) : error ? (
         <div className="text-center text-danger">{error}</div>
       ) : (
-        <MovieList movies={movies} onEdit={handleEditMovie} onDelete={handleDeleteMovie} />
+        <MovieList 
+          movies={movies} 
+          onEdit={handleEditMovie} 
+          onDelete={handleDeleteMovie} 
+        />
       )}
       {showModal && (
         <MovieModal
